@@ -1,0 +1,23 @@
+<?php
+/**
+ * The comments, or the button that asks for them
+ *
+ * The configuration is a `data-` attribute and not an inline `<script>` writing `disqus_config`.
+ * A document can never carry a script tag - `html_input => 'strip'` - and a block should not be
+ * the one thing on the site that can. This is data, and `esc_attr` is the whole of the escaping.
+ *
+ * `#disqus_thread` is the id Disqus's own script looks for and is not ours to rename.
+ */
+?>
+<div class="disqus" data-disqus="<?= esc_attr($config) ?>"<?= $onLoad ? ' data-disqus-on-load' : '' ?>>
+    <?php if (!$onLoad): ?>
+        <?php // A real button, so it is reachable by keyboard and announced as one. It is removed
+              // when it is pressed - there is nothing to go back to. ?>
+        <button type="button" class="disqus-button" data-disqus-load><?= esc_html($label) ?></button>
+    <?php endif ?>
+    <div id="disqus_thread"></div>
+    <noscript>
+        <p class="disqus-noscript">Comments need JavaScript, and are
+            <a href="https://disqus.com">on Disqus</a>.</p>
+    </noscript>
+</div>

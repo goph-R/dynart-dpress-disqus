@@ -1,0 +1,26 @@
+/* The comments box, and the button in front of it.
+ *
+ * Shape only, like every plugin stylesheet: this file is put in the head *after* the theme's own,
+ * so on any property both of them set, this one wins. A theme styling the button should say things
+ * this file does not - a typeface, a colour - and it will be left alone.
+ *
+ * Loaded on the pages with a thread on them and no others. */
+
+.disqus { margin-top: 40px; }
+
+/* `currentColor` and a border, so it takes the page's own ink rather than arriving with a colour
+   of its own. A button on a dark theme and a button on a light one are the same rule this way. */
+.disqus-button {
+    display: inline-block;
+    padding: 10px 18px;
+    background: none;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    line-height: 1;
+}
+.disqus-button:hover { background: rgba(127, 127, 127, .15); }
+
+.disqus-noscript { opacity: .8; }
