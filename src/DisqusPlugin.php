@@ -4,6 +4,7 @@ namespace Dynart\Disqus;
 
 use Dynart\Micro\EventServiceInterface;
 use Dynart\Micro\Micro;
+use Dynart\Dpress\Entity\Content;
 use Dynart\Dpress\Form\AdminForms;
 use Dynart\Dpress\Form\DpressForm;
 use Dynart\Dpress\Form\FormFactory;
@@ -178,18 +179,23 @@ class DisqusPlugin extends AbstractPlugin {
     }
 
     /**
-     * Writes it, after the form said the rest of the save was good
+     * Writes it, after the editor saved the rest
      *
      * `after_process` rather than a content event, because a content event carries the `Content`
      * and this value never reaches it - the field belongs to a plugin and `contentData()` names
      * the columns it will write, deliberately.
      *
-     * Only when the form validated. A save the editor refused should not leave one field of it
-     * written anyway.
+     * **The second argument is whatever the save handler returned**, not a bool.
+     * `DpressForm::handle()` passes its callback's return value straight through, and the
+     * content editor's callback returns the `Content` it just wrote. There is no "did it
+     * validate" to check here either: `handle()` is only reached inside `if ($form->process())`,
+     * so a form that failed never gets this far.
      */
-    public function onContentSaved(DpressForm $form, bool $valid, array $context): void {
-        $content = $context['content'] ?? null;
-        if (!$valid || $content === null || !$content->isPost()) {
+    public function onContentSaved(DpressForm $form, mixed $result, array $context): void {
+        // what was just written, and the context as the fallback for a caller that returns
+        // something else
+        $content = $result instanceof Content ? $result : ($context['content'] ?? null);
+        if (!$content instanceof Content || !$content->isPost()) {
             return;
         }
         $values = $form->values();
