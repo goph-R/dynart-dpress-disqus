@@ -122,13 +122,18 @@ class DisqusPlugin extends AbstractPlugin {
      */
     protected function registerSettings(): void {
         $fields = Micro::get(SettingFields::class);
+        // A Comments section of the settings screen, which the core does not draw: a field names
+        // the section it goes in, and the first one to name it makes it. The name is the core's
+        // constant so a second comments plugin would land beside this one rather than beside it.
         $fields->add(Disqus::SHORTNAME, 'string', [
             'type' => 'text', 'label' => 'Disqus shortname', 'required' => false,
+            'section' => AdminForms::SECTION_COMMENTS,
             'description' => 'The name of your Disqus site: for `gopherlab.disqus.com`, `gopherlab`.'
                 .' Nothing is rendered and nothing is loaded until this is set.',
         ]);
         $fields->add(Disqus::LOAD, 'string', [
             'type' => 'select', 'label' => 'Load comments', 'required' => false,
+            'section' => AdminForms::SECTION_COMMENTS,
             'options' => [
                 Disqus::LOAD_CLICK => 'When a reader asks for them',
                 Disqus::LOAD_PAGE  => 'With the page',
@@ -170,6 +175,9 @@ class DisqusPlugin extends AbstractPlugin {
         return [
             self::IDENTIFIER_FIELD => [
                 'type' => 'text', 'label' => 'Disqus identifier', 'required' => false,
+                // folded away with the weight and the CSS: a box for an imported post, which
+                // is a handful of posts once and never again
+                'section' => AdminForms::SECTION_ADVANCED,
                 'description' => 'Only for a post that already has comments somewhere else.'
                     .' Paste it exactly as Disqus exported it - a WordPress one looks like'
                     .' `573 https://example.com/?p=573`, and rebuilding it from the id gets'

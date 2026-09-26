@@ -19,6 +19,14 @@ class EditorFieldTest extends TestCase {
     }
 
     /**
+     * Folded away with the weight and the CSS: it is for a handful of imported posts, once
+     */
+    public function testItLivesInTheEditorsAdvancedSection(): void {
+        $field = DisqusPlugin::identifierField(38)[DisqusPlugin::IDENTIFIER_FIELD] ?? [];
+        $this->assertSame(\Dynart\Dpress\Form\AdminForms::SECTION_ADVANCED, $field['section'] ?? null);
+    }
+
+    /**
      * The description names what the post would be keyed on with the box left empty, because
      * "empty means the default" is only useful if you can see what the default is
      */
